@@ -1,0 +1,69 @@
+### **v0.1 - Core CRUD & SQLite Foundation**
+
+* Create, view, update, delete passwords
+* SQLite database
+
+### **v0.2 - Master Password & Authentication**
+
+* Master password setup
+* Layered architecture
+* Input validation
+* Secure login
+* Password hashing
+* Login attempt limit
+
+### **v0.3 - Password Encryption**
+
+* Encrypt stored passwords
+* Decrypt when viewing
+* Encryption utility
+* Secure key management
+
+### **v0.4 - Password Generator**
+
+* Random password generation
+* Length customization
+* Character type options
+* Save generated passwords
+
+### **v0.5 - Categories & Organization**
+
+* Categories and tags
+* Favorites
+* Notes
+* Search and filtering
+
+### **v0.6 - Import, Export & Backups**
+
+* CSV import/export
+* Database backup
+* Database restore
+* Duplicate detection
+
+### **v0.7 - Security Improvements**
+
+* Password strength checker
+* Password history
+* Activity timestamps
+* Failed login logging
+
+### **v0.8 - User Experience & Statistics**
+
+* Hidden password input
+* Clipboard copy
+* Improved CLI menus
+* Password statistics
+
+### **v0.9 - Feature Complete & Testing**
+
+* Advanced search
+* Change master password
+* Error handling
+* Final testing and bug fixes
+
+### **v1.0 - Cleanup, Refactoring & Polish**
+
+* Refactor code
+* Remove dead code
+* Add type hints and docstrings
+* Final optimization and cleanup
