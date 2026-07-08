@@ -1,112 +1,68 @@
-import sqlite3
+from storage import password_repository, master_password_repository, database
+from system import menu
+from security import hashing
+from logic import authentication
 
 def main():
     welcome_message = "Welcome to Password Manager!"
 
     print(welcome_message)
 
-    connection = sqlite3.connect("passwords.db")
-    cursor = connection.cursor()
+    database.create_tables()
 
-    cursor.execute(
-            """CREATE TABLE IF NOT EXISTS passwords
-            (
-                id INTEGER PRIMARY KEY,
-                website TEXT,
-                username TEXT,
-                password TEXT
-            )"""
-        )
-            
 
-    while True:
-            print("1. Add Password")
-            print("2. View Password")
-            print("3. Update Password")
-            print("4. Delete Password")
-            print("5. Exit")
+    exists = master_password_repository.master_password_exists()
+    print(f"[DEBUG] master password exists: {exists}")
 
-            try:
-                choice = int(input("Choose: "))
-            except:
-                return None
-            if choice == 1:
-                website = input("Enter the name of the website:")
-                username = input("Enter username:")
-                password = input("Enter passowrd:")
+    auth_ok = authentication.authenticate()
 
-                cursor.execute(
-                """INSERT INTO passwords(
-                    website,
-                    username,
-                    password
-                )
-                VALUES(?, ?, ?)
-                """,
-                (website, username, password)
-                )
-                connection.commit()
+    if auth_ok:
+        while True:
+                menu.show_main_menu()
+                choice = menu.get_menu_choice()
 
-            elif choice == 2:
-                cursor.execute(
-                """SELECT * FROM passwords
-                """
-                )
+                if choice == 1:
+                    website = input("Enter the name of the website:")
+                    username = input("Enter username:")
+                    password = input("Enter passowrd:")
 
-                rows = cursor.fetchall()
-                for row in rows:
-                    print(row)
+                    password_repository.add_password(website, username, password)
 
-            elif choice == 3:
-                cursor.execute(
-                """SELECT * FROM passwords
-                """
-                )
+                elif choice == 2:
+                    rows = password_repository.get_passwords()
 
-                rows = cursor.fetchall()
-                for row in rows:
-                    print(row)
+                    if not rows:
+                        print(f"{'=' * 40}")
+                        print("No passwords stored.")
+                        print(f"{'=' * 40}")
+                    else:
+                        for row in rows:
+                            print(row)
 
-                new_website = input("Enter the new website name: ")
-                new_username = input("Enter the new username: ")
-                new_password = input("Enter the new password: ")
-                update_id = int(input("Enter the new id:  "))                
+                elif choice == 3:
+                    password_repository.get_passwords()
 
-                cursor.execute(
-                """UPDATE passwords
-                SET website = ?,
-                    username = ?,
-                    password = ?
-                WHERE id = ?
-                """,
-                (new_website, new_username, new_password, update_id)
-                )
-                connection.commit()
+                    new_website = input("Enter the new website name: ")
+                    new_username = input("Enter the new username: ")
+                    new_password = input("Enter the new password: ")
+                    update_id = int(input("Enter the new id:  "))
 
-            elif choice == 4:
-                cursor.execute(
-                """SELECT * FROM passwords
-                """
-                )
+                    password_repository.update_password(new_website, new_username, new_password, update_id)
 
-                rows = cursor.fetchall()
-                for row in rows:
-                    print(row)
+                elif choice == 4:
+                    password_repository.get_passwords()
 
-                delete_id = int(input("Enter the id: "))
+                    delete_id = int(input("Enter the id: "))
 
-                cursor.execute(
-                """DELETE FROM passwords
-                WHERE id = ?
-                """,
-                (delete_id,)
-                )
-                connection.commit()
+                    password_repository.delete_password(delete_id)
 
-            elif choice == 5:
-                break
-
-    connection.close()
+                elif choice == 5:
+                    print("EXITING...")
+                    break
+                else:
+                    print("Invalid Input")
+    else:
+        exit
 
 if __name__ == "__main__":
     main()
