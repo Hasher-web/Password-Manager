@@ -26,3 +26,15 @@ def verify_password(password, stored_salt, stored_hash):
     )
 
     return password_hash.hex() == stored_hash
+
+def derive_key(password, stored_salt):
+    salt = bytes.fromhex(stored_salt)
+
+    derived_key = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode(),
+        salt,
+        100000
+    )
+
+    return derived_key

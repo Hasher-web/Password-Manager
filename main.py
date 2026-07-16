@@ -14,9 +14,9 @@ def main():
     exists = master_password_repository.master_password_exists()
     print(f"[DEBUG] master password exists: {exists}")
 
-    auth_ok = authentication.authenticate()
+    session_key = authentication.authenticate()
 
-    if auth_ok:
+    if session_key:
         while True:
                 menu.show_main_menu()
                 choice = menu.get_menu_choice()
@@ -26,10 +26,10 @@ def main():
                     username = input("Enter username:")
                     password = input("Enter passowrd:")
 
-                    password_repository.add_password(website, username, password)
+                    password_repository.add_password(website, username, password, session_key)
 
                 elif choice == 2:
-                    rows = password_repository.get_passwords()
+                    rows = password_repository.get_passwords(session_key)
 
                     if not rows:
                         print(f"{'=' * 40}")
@@ -40,14 +40,14 @@ def main():
                             print(row)
 
                 elif choice == 3:
-                    password_repository.get_passwords()
+                    password_repository.get_passwords(session_key)
 
                     new_website = input("Enter the new website name: ")
                     new_username = input("Enter the new username: ")
                     new_password = input("Enter the new password: ")
                     update_id = int(input("Enter the new id:  "))
 
-                    password_repository.update_password(new_website, new_username, new_password, update_id)
+                    password_repository.update_password(new_website, new_username, new_password, update_id, session_key)
 
                 elif choice == 4:
                     password_repository.get_passwords()
